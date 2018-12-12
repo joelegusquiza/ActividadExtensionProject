@@ -22,47 +22,79 @@
                 </div>
                 <!--begin::Form-->
                 <form class="m-form m-form--fit m-form--label-align-right">
-                    <div class="m-portlet__body">
+                    <div class="form-group m-form__group">
+                        <label for="exampleInputEmail1">
+                            Cedula de Identidad
+                        </label>
+                        <input type="text" class="form-control m-input" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+
+                    </div>
+                    <div class="form-group m-form__group">
+                        <label>
+                           Carrera
+                        </label>
+                        
+                            <select class="form-control m-bootstrap-select m_selectpicker" data-bind="options: carrerasExistentes,
+                                                    optionsValue: 'value',
+                                                   optionsText: 'text',
+                                                   value: carreraSeleccionadaId,
+                                                   optionsCaption: 'Seleccione una opcion'">
+                                
+                            </select>
+                        
+                    </div>
+
+                    <div class="m-portlet__body" data-bind="foreach: categorias">
+                        <div class="form-group m-form__group">
+                            <label data-bind="text: nombre ()+ ' ('+descripcion()+')'">
+
+                            </label>
+
+                            <table class="table m-table--head-bg-success form-control m-input">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Actividad Extension Universitaria
+                                        </th>
+
+                                        <th>
+                                            Canitdad Horas Realizadas
+                                        </th>
+                                        <th>
+                                            Canitad Horas de Extension
+                                        </th>
+                                        <th>
+                                            Fecha Inicio
+                                        </th>
+                                        <th>
+                                            Fecha Fin
+                                        </th>
+                                        <th>
+                                            Lugar/Profesor/Tutor
+                                        </th>
+
+                                    </tr>
+                                </thead>
+                                <tbody data-bind="foreach: detalle">
+                                    <tr>
+
+                                        <td data-bind="text: caracter()+' - '+nombre()"></td>
+                                        <td><input type="text" data-bind="value: horasRelojRealizadas" /></td>
+                                        <td><input type="text" data-bind="value: horasExtensionRealizadas" /></td>
+                                        <td><input value="" class="form-control datepicker" style="width: 100% !important;" data-bind="datepicker: fechaInicio, datepickerOptions: {language: 'es'}"></td>
+                                        <td><input value="" class="form-control datepicker" style="width: 100% !important;" data-bind="datepicker: fechaFin, datepickerOptions: {language: 'es'}"></td>
+                                        <td><input type="text" data-bind="value: lugarProfesorTutor" /></td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+
                         <!--begin::Section-->
                         <div class="m-section">
                             <div class="m-section__content">
-                                <table class="table m-table--head-bg-success">
-                                    <thead>
-                                        <tr>
-                                            <th colspan="2">
-                                                Actividad Extension Universitaria
-                                            </th>
-                                            <th>
-                                                Equivalencia en horas de Extension
-                                            </th>
-                                            <th>
-                                                Canitdad Horas Realizadas
-                                            </th>
-                                            <th>
-                                                Canitad Horas de Extension
-                                            </th>
-                                            <th>
-                                                Fecha
-                                            </th>
-                                            <th>
-                                                Lugar/Profesor/Tutor
-                                            </th>
 
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>a</td>
-                                            <td>b</td>
-                                            <td></td>
-                                            <td><input type="text" /></td>
-                                            <td><input type="text" /></td>
-                                            <td><input type="text" /></td>
-                                            <td><input type="text" /></td>
-                                        </tr>
-
-                                    </tbody>
-                                </table>
                             </div>
                         </div>
                         <!--end::Section-->

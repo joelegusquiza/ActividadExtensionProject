@@ -34,6 +34,7 @@ namespace ActividadExtensionProject.Areas.Admin.Controllers
             var viewModel = new AddActaEUViewModel();
             //getAllSubCategories
             var categorias = _categorias.GetAllWithSubCategorias();
+    
             foreach (var categoria in categorias)
             {
                 var categoriaTemp = AutoMapper.Mapper.Map<AddActaEUCategoriaViewModel>(categoria);
@@ -42,7 +43,7 @@ namespace ActividadExtensionProject.Areas.Admin.Controllers
                     var detalle = AutoMapper.Mapper.Map<AddActaEUDetalleViewModel>(subCategoria);
                     categoriaTemp.Detalle.Add(detalle);
                 }
-                viewModel.CategoriasExistentes.Add(categoriaTemp);                
+                viewModel.Categorias.Add(categoriaTemp);                
 
             }
             return View(viewModel);
