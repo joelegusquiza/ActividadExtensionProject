@@ -5,11 +5,28 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="6.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.9" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.4" />
   </ItemGroup>
 
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ApplicationContext\ApplicationContext.csproj" />
+    <ProjectReference Include="..\Core.AutoMapper\Core.AutoMapper.csproj" />
+    <ProjectReference Include="..\Core.DAL\Core.DAL.csproj" />
+    <ProjectReference Include="..\Core.DTOs\Core.DTOs.csproj" />
+    <ProjectReference Include="..\Core.Entities\Core.Entities.csproj" />
+    <ProjectReference Include="..\Core\Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Shared\Controllers\" />
+    <Folder Include="wwwroot\metronic\css\" />
+    <Folder Include="wwwroot\metronic\js\" />
   </ItemGroup>
 
 </Project>
