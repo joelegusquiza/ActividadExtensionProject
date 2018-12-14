@@ -42,6 +42,7 @@ namespace ActividadExtensionProject
             services.AddSingleton<IEstudiantes, EstudiantesService>();
             services.AddSingleton<ICategorias, CategoriasService>();
             services.AddSingleton<ISubCategorias, SubCategoriasService>();
+            services.AddSingleton<ICarreras, CarrerasService>();
             return services.BuildServiceProvider();
         }
 

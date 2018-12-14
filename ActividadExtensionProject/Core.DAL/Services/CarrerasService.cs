@@ -8,18 +8,18 @@ using System.Text;
 
 namespace Core.DAL.Services
 {
-    public class EstudiantesService : IEstudiantes
+    public class CarrerasService : ICarreras
     {
         private readonly DataContext _context;
 
-        public EstudiantesService(DataContext context)
+        public CarrerasService(DataContext context)
         {
             _context = context;
         }
 
-        public Estudiante GetByCedulaIdentidad(string cedulaIdentidad)
+        public IQueryable<Carrera> GetAll()
         {
-            return _context.Set<Estudiante>().FirstOrDefault(x => x.CedulaIdentidad == cedulaIdentidad && x.Active);
+            return _context.Set<Carrera>().Where(x => x.Active);
         }
     }
 }

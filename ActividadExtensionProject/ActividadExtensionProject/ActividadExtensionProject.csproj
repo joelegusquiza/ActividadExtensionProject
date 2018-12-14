@@ -26,7 +26,6 @@
   <ItemGroup>
     <Folder Include="Areas\Shared\Controllers\" />
     <Folder Include="wwwroot\metronic\css\" />
-    <Folder Include="wwwroot\metronic\js\" />
   </ItemGroup>
 
 </Project>

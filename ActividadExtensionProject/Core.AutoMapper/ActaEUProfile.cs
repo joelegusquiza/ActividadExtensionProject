@@ -12,6 +12,11 @@ namespace Core.AutoMapper
                 .ForMember(dest => dest.Estudiante, opt => opt.MapFrom(src => $"{src.Estudiante.Nombre} {src.Estudiante.Apellido}"))
                 .ForMember(dest => dest.Carrera, opt => opt.MapFrom(src => $"{src.Carrera.Abreviatura}"));
 
+            CreateMap<AddActaEUDetalleViewModel, ActaEUDetalle>();
+              
+
         }
+
+
     }
 }

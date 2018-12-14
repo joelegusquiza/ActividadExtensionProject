@@ -12,10 +12,12 @@ namespace Core.AutoMapper
         public CategoriaProfile()
         {
             CreateMap<SubCategoria, AddActaEUDetalleViewModel>()
-                .ForMember(dest => dest.SubCategoriaId, opt => opt.MapFrom(src => src.Id));
+                .ForMember(dest => dest.SubCategoriaId, opt => opt.MapFrom(src => src.Id))
+                .ReverseMap();
 
             CreateMap<Categoria, AddActaEUCategoriaViewModel>()
-                .ForMember(dest => dest.CategoriaId, opt => opt.MapFrom(src => src.Id));
+                .ForMember(dest => dest.CategoriaId, opt => opt.MapFrom(src => src.Id))
+                .ReverseMap();
 
         }
     }

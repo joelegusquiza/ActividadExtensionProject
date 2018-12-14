@@ -11,6 +11,7 @@ namespace Core.DTOs.ActasEU
 
     public class ActaEUViewModel
     {
+        public int Id { get; set; }
         public int EstudianteId { get; set; }
         public string Estudiante { get; set; }
         public int CarreraId { get; set; }
