@@ -13,6 +13,7 @@ namespace Core.Entities
         public int HorasRelojRealizadas { get; set; }
         public int HorasExtensionRealizadas { get; set; }
         public string LugarProfesorTutor { get; set; }
+        public string Institucion { get; set; }
 
         public int? CategoriaId { get; set; }
         public Categoria Categoria { get; set; }

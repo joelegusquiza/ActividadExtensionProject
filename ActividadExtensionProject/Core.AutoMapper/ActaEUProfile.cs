@@ -14,9 +14,6 @@ namespace Core.AutoMapper
 
             CreateMap<AddActaEUDetalleViewModel, ActaEUDetalle>();
               
-
         }
-
-
     }
 }

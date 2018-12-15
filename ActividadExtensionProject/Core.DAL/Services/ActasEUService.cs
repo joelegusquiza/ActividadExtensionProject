@@ -28,9 +28,9 @@ namespace Core.DAL.Services
             return _context.Set<ActaEU>().Include(x => x.Carrera).Include(x => x.Estudiante).Where(x => x.Active);
         }
 
-        public IQueryable<ActaEUDetalle> GetDetalleByMesAnho(int mes, int anho)
+        public IQueryable<ActaEUDetalle> GetDetalleByMesAnhoCarrera(int mes, int anho, int carreraId)
         {
-            return _context.Set<ActaEUDetalle>().Include(x => x.Acta).ThenInclude(x => x.Carrera).ThenInclude(x => x.Estudiantes).Where(x => x.FechaFin.Month == mes && x.FechaFin.Year == anho);
+            return _context.Set<ActaEUDetalle>().Include(x => x.Acta).ThenInclude(x => x.Carrera).ThenInclude(x => x.Estudiantes).Include(x => x.Categoria).Include(x => x.SubCategoria).Where(x => x.FechaFin.Month == mes && x.FechaFin.Year == anho && x.Acta.CarreraId == carreraId);
         }
 
         public SystemValidationModel Save(AddActaEUViewModel viewModel)

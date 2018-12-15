@@ -43,6 +43,7 @@ namespace ActividadExtensionProject
             services.AddSingleton<ICategorias, CategoriasService>();
             services.AddSingleton<ISubCategorias, SubCategoriasService>();
             services.AddSingleton<ICarreras, CarrerasService>();
+            services.AddSingleton<IReportes, ReportesService>();
             return services.BuildServiceProvider();
         }
 
@@ -53,6 +54,7 @@ namespace ActividadExtensionProject
             {
                 cfg.AddProfile<ActaEUProfile>();
                 cfg.AddProfile<CategoriaProfile>();
+                cfg.AddProfile<EstudianteProfile>();
             });
             if (env.IsDevelopment())
             {
