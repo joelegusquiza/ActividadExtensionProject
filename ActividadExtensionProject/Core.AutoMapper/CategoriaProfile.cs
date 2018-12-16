@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Core.DTOs.ActasEU;
+using Core.DTOs.Categorias;
 using Core.Entities;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,21 @@ namespace Core.AutoMapper
                 .ForMember(dest => dest.CategoriaId, opt => opt.MapFrom(src => src.Id))
                 .ReverseMap();
 
+            CreateMap<Categoria, CategoriaViewModel>()              
+               .ReverseMap();
+
+            CreateMap<Categoria, AddCategoriaViewModel>();
+
+            CreateMap<AddCategoriaViewModel, Categoria>()
+                 .ForMember(dest => dest.SubCategorias, opt => opt.Ignore());
+
+            CreateMap<Categoria, EditCategoriaViewModel>();
+
+            CreateMap<EditCategoriaViewModel, Categoria>()
+                .ForMember(dest => dest.SubCategorias, opt => opt.Ignore());
+
+            CreateMap<UpsertSubCategoriaViewModel, SubCategoria>()
+               .ReverseMap();
         }
     }
 }

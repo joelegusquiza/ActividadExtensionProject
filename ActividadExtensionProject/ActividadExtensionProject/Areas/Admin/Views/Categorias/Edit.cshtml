@@ -1,0 +1,250 @@
+﻿
+@model Core.DTOs.Categorias.EditCategoriaViewModel
+@{
+    ViewData["Title"] = "Add";
+    Layout = "~/Areas/Shared/Views/Shared/_Layout.cshtml";
+}
+
+<div class="m-content" style="width: 100%">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="m-portlet m-portlet--tab">
+                @{
+                    Html.RenderPartial("~/Areas/Shared/Views/Shared/_ErrorDiv.cshtml");
+                    Html.RenderPartial("~/Areas/Shared/Views/Shared/_SuccessDiv.cshtml");
+                }
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <span class="m-portlet__head-icon m--hide">
+                                <i class="la la-gear"></i>
+                            </span>
+                            <h3 class="m-portlet__head-text">
+                                Editar Categoria
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!--begin::Form-->
+                <form id="form" class="m-form m-form--fit m-form--label-align-right" data-bind="submit: postDataToController">
+                    <div class="form-group m-form__group">
+                        <label for="exampleInputEmail1">
+                            Nombre
+                        </label>
+                        <input type="text" class="form-control m-input" id="nombre" name="nombre" placeholder="" data-bind="value: nombre">
+
+                    </div>
+                    <div class="form-group m-form__group">
+                        <label for="exampleInputEmail1">
+                            Descripcion
+                        </label>
+                        <input type="text" class="form-control m-input" id="descripcion" name="descripcion" placeholder="" data-bind="value: descripcion">
+
+                    </div>
+                    <div class="form-group m-form__group">
+                        <label for="exampleInputEmail1">
+                            Caracter
+                        </label>
+                        <input type="text" class="form-control m-input" id="caracter" name="caracter" placeholder="" data-bind="value: caracter">
+
+                    </div>
+                    <div class="form-group m-form__group">
+                        <label for="exampleInputEmail1">
+                            Horas Reloj
+                        </label>
+                        <input type="text" class="form-control m-input" id="horaReloj" name="horaReloj" placeholder="" data-bind="value: horaReloj">
+
+                    </div>
+                    <div class="form-group m-form__group">
+                        <label for="exampleInputEmail1">
+                            Horas Extension
+                        </label>
+                        <input type="text" class="form-control m-input" id="horaExtension" name="horaExtension" placeholder="" data-bind="value: horaExtension">
+
+                    </div>
+                    <div class="m-portlet__foot m-portlet__foot--fit">
+                        <div class="m-form__actions">
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-success">
+                                        Guardar
+                                    </button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="m-portlet m-portlet--tab">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <span class="m-portlet__head-icon m--hide">
+                                <i class="la la-gear"></i>
+                            </span>
+                            <h3 class="m-portlet__head-text">
+                                Agregar Sub Categoria
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!--begin::Form-->
+                <form id="formSubCategoria" class="m-form m-form--fit m-form--label-align-right" data-bind="submit: addSubCategoria">
+                    <div class="form-group m-form__group">
+                        <label for="exampleInputEmail1">
+                            Nombre
+                        </label>
+                        <input type="text" class="form-control m-input" id="subCategoriaNombre" name="subCategoriaNombre" placeholder="" data-bind="value: subCategoria.nombre">
+
+                    </div>
+                    <div class="form-group m-form__group">
+                        <label for="exampleInputEmail1">
+                            Caracter
+                        </label>
+                        <input type="text" class="form-control m-input" id="subCategoriaCaracter" name="subCategoriaCaracter" placeholder="" data-bind="value: subCategoria.caracter">
+
+                    </div>
+                    <div class="m-portlet__foot m-portlet__foot--fit">
+                        <div class="m-form__actions">
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-success">
+                                        Agregar
+                                    </button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="m-portlet__body">
+                    <div class="form-group m-form__group">
+
+                        <table class="table m-table--head-bg-success form-control m-input">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Nombre
+                                    </th>
+
+                                    <th>
+                                        Caracter
+                                    </th>
+                                    <th>
+
+                                    </th>
+
+                                </tr>
+                            </thead>
+                            <tbody data-bind="foreach: subCategorias">
+                                <tr>
+
+                                    <td data-bind="text: nombre"></td>
+                                    <td data-bind="text: caracter"></td>
+                                    <td><a href="#" data-bind="click: $parent.deleteSubCategoria "><i class="fa fa-trash"></i></a></td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+
+        var model = @Html.Raw(Json.Serialize(Model));
+        var dataViewModel = ko.mapping.fromJS(model);
+
+        dataViewModel.postDataToController = function () {
+            if ($("#form").valid()) {
+                $.ajax({
+                    url: "@Url.Action("Edit", "Categorias")",
+                    type: "POST",
+                    data: { model: ko.toJSON(dataViewModel) },
+                    success: function (response) {
+                        if (response.success) {
+                            window.location.replace(response.message);
+                        } else {
+                            showError(response.message);
+                        }
+                    },
+                    error: function () {
+                        showError();
+                    }
+                });
+            }
+
+            return false;
+        }
+
+        dataViewModel.addSubCategoria = function () {
+            if ($("#formSubCategoria").valid()) {
+                dataViewModel.subCategorias.push(ko.mapping.fromJS(ko.toJS(dataViewModel.subCategoria)));
+                dataViewModel.subCategoria.nombre("");
+                dataViewModel.subCategoria.caracter("");
+            }
+
+        }
+
+        dataViewModel.deleteSubCategoria = function () {
+            var item = this;
+            dataViewModel.subCategorias.remove(item);
+        }
+
+        $(document).ready(function ()
+        {
+            $('#form').validate({
+                rules: {
+                    nombre: {
+                        required: true,
+                    },
+                    descripcion: {
+                        required: true,
+                    },
+                    caracter: {
+                        required: true,
+                    },
+                    horaReloj: {
+                        required: true,
+                    },
+                    horaExtension: {
+                        required: true
+                    }
+                },
+                errorPlacement: function (error, element) {
+                    var span = element.siblings('span');
+                    error.appendTo(span);
+                }
+            });
+
+            $('#formSubCategoria').validate({
+                rules: {
+                    subCategoriaNombre: {
+                        required: true,
+                    },
+                    subCategoriaCaracter: {
+                        required: true,
+                    }
+                },
+                errorPlacement: function (error, element) {
+                    var span = element.siblings('span');
+                    error.appendTo(span);
+                }
+            });
+        })
+        ko.applyBindings(dataViewModel);
+    </script>
+}
+
