@@ -6,7 +6,8 @@ namespace Core.DTOs.Categorias
 {
     public class AddCategoriaViewModel
     {
-        public string Nombre { get; set; }
+        public bool Active { get; set; }
+        public string Nombre { get; set; }        
         public string Caracter { get; set; }
         public string Descripcion { get; set; }
         public int HoraReloj { get; set; }

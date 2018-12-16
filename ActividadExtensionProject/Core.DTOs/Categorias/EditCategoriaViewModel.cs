@@ -6,6 +6,7 @@ namespace Core.DTOs.Categorias
 {
     public class EditCategoriaViewModel
     {
+        public bool Active { get; set; }
         public int Id { get; set; }
         public string Nombre { get; set; }
         public string Caracter { get; set; }

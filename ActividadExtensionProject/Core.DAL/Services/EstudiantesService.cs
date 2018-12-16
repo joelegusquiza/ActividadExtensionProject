@@ -72,7 +72,7 @@ namespace Core.DAL.Services
             var validation = new SystemValidationModel()
             {
                 Success = success,
-                Message = success ? "Se ha editado eliminado el estudiante" : "No se pudo eliminar el estudiante"
+                Message = success ? "Se ha eliminado el estudiante" : "No se pudo eliminar el estudiante"
             };
             return validation;
         }

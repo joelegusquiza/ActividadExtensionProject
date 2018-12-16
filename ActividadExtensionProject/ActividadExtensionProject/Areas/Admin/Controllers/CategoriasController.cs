@@ -25,7 +25,7 @@ namespace ActividadExtensionProject.Areas.Admin.Controllers
         {
             var viewModel = new IndexCategoriasViewModel()
             {
-                Categorias = Mapper.Map<List<CategoriaViewModel>>(_categorias.GetAll())
+                Categorias = Mapper.Map<List<CategoriaViewModel>>(_categorias.GetAll().OrderBy(x => x.Caracter).ToList())
             };
             return View(viewModel);
         }

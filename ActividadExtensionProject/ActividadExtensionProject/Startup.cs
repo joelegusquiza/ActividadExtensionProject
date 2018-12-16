@@ -55,6 +55,7 @@ namespace ActividadExtensionProject
                 cfg.AddProfile<ActaEUProfile>();
                 cfg.AddProfile<CategoriaProfile>();
                 cfg.AddProfile<EstudianteProfile>();
+                cfg.AddProfile<CarreraProfile>();
             });
             if (env.IsDevelopment())
             {

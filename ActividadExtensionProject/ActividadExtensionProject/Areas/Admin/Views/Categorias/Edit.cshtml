@@ -175,7 +175,7 @@
                     data: { model: ko.toJSON(dataViewModel) },
                     success: function (response) {
                         if (response.success) {
-                            window.location.replace(response.message);
+                            showSuccess(response.message);
                         } else {
                             showError(response.message);
                         }

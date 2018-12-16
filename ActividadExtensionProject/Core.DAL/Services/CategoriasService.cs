@@ -61,6 +61,14 @@ namespace Core.DAL.Services
             categoria = Mapper.Map(viewModel, categoria);
             _context.Entry(categoria).State = EntityState.Modified;
 
+            var subCategoriaIdToDelete = categoria.SubCategorias.Select(x => x.Id).Except(viewModel.SubCategorias.Where(x => x.Id > 0).Select(x => x.Id));
+
+            foreach (var subCategoria in categoria.SubCategorias.Where(x => subCategoriaIdToDelete.Contains(x.Id)))
+            {
+                _context.Entry(subCategoria).State = EntityState.Deleted;
+            }
+
+
             foreach (var subCategoria in viewModel.SubCategorias.Where(x => x.Id == 0))
             {                
                 var subCategoriaEntity = Mapper.Map<SubCategoria>(subCategoria);
@@ -68,13 +76,7 @@ namespace Core.DAL.Services
                 categoria.SubCategorias.Add(subCategoriaEntity);
             }
 
-            var subCategoriaIdToDelete = categoria.SubCategorias.Select(x => x.Id).Except(viewModel.SubCategorias.Select(x => x.Id).Where(x => x != 0));
-
-            foreach (var subCategoria in categoria.SubCategorias.Where(x => subCategoriaIdToDelete.Contains(x.Id)))
-            {
-                _context.Entry(subCategoria).State = EntityState.Deleted;               
-            }
-
+            
             var success = _context.SaveChanges() > 0;
             var validation = new SystemValidationModel()
             {
