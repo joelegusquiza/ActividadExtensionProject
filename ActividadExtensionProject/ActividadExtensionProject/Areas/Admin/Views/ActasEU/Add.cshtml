@@ -29,12 +29,30 @@
                 <!--begin::Form-->
                 <form id="form" class="m-form m-form--fit m-form--label-align-right" data-bind="submit: save">
                     <div class="form-group m-form__group">
+                        <label>
+                            Cedula de Identidad
+                        </label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" data-bind="value: cedulaIdentidad">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button" onclick="showAgregarEstudianteModal()">
+                                    Agregar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    @*<div class="form-group m-form__group" >
                         <label for="exampleInputEmail1">
                             Cedula de Identidad
                         </label>
                         <input type="text" class="form-control m-input" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="" data-bind="value: cedulaIdentidad">
+                        <div class="" align="right">                           
+                            <button type="button" class="btn btn-success" onclick="showAgregarEstudianteModal()">
+                                Agregar
+                            </button>
 
-                    </div>
+                        </div>
+                    </div>*@
                     <div class="form-group m-form__group">
                         <label>
                             Carrera
@@ -110,7 +128,9 @@
         </div>
     </div>
 </div>
-
+@{
+    Html.RenderPartial("~/Areas/Admin/Views/Shared/_AddEstudianteModal.cshtml");
+}
 @section scripts{
     <script>
 
@@ -142,5 +162,18 @@
         }
 
         ko.applyBindings(dataViewModel);
+
+
+        function showAgregarEstudianteModal()
+        {
+            $("#addEstudianteModalIframe").attr('src', '@Url.Action("AddEstudiante", "Estudiantes", new { area = "Admin"})');
+            $("#addEstudianteModal").modal("show");
+        }
+
+        function closeAddEstudianteModal(cedulaIdentidad)
+        {
+            $("#addEstudianteModal").modal("hide");
+            dataViewModel.cedulaIdentidad(cedulaIdentidad);
+        }
     </script>
 }

@@ -54,6 +54,23 @@ namespace ActividadExtensionProject.Areas.Admin.Controllers
             return View(viewModel);
         }
 
+        public IActionResult AddEstudiante()
+        {
+            var viewModel = new UpsertEstudianteViewModel();
+            viewModel.CarrerasExistentes = _carreras.GetAll().Select(x => new DropDownViewModel<int>()
+            {
+                Text = $"{x.Abreviatura} - {x.Nombre}",
+                Value = x.Id
+            }).ToList();
+
+            viewModel.SexoExistentes = Enum.GetValues(typeof(Sexo)).Cast<Sexo>().Select(x => new DropDownViewModel<int>
+            {
+                Text = x.ToString(),
+                Value = (int)x
+            }).ToList();
+            return View("~/Areas/Admin/Views/Estudiantes/Shared/AddEstudiante.cshtml", viewModel);
+        }
+
         [HttpPost]
         public SystemValidationModel Upsert(string model)
         {

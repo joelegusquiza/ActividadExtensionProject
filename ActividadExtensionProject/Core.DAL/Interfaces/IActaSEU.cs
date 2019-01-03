@@ -12,6 +12,7 @@ namespace Core.DAL.Interfaces
     public interface IActasEU
     {
         IQueryable<ActaEU> GetAll();
+        IQueryable<ActaEUDetalle> GetDetalleInRange(DateTime inicio, DateTime fin, int carreraId);
         IQueryable<ActaEUDetalle> GetDetalleByMesAnhoCarrera(int mes, int anho, int carreraId);
         SystemValidationModel Save(AddActaEUViewModel viewModel);
         SystemValidationModel Desactivate(int id);

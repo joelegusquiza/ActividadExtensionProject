@@ -6,9 +6,7 @@ using Core.DTOs.Shared;
 using Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Core.DAL.Services
 {
@@ -26,6 +24,11 @@ namespace Core.DAL.Services
         public IQueryable<ActaEU> GetAll()
         {
             return _context.Set<ActaEU>().Include(x => x.Carrera).Include(x => x.Estudiante).Where(x => x.Active);
+        }
+
+        public IQueryable<ActaEUDetalle> GetDetalleInRange(DateTime inicio, DateTime fin, int carreraId)
+        {
+            return _context.Set<ActaEUDetalle>().Include(x => x.Acta).ThenInclude(x => x.Carrera).ThenInclude(x => x.Estudiantes).Include(x => x.Categoria).Include(x => x.SubCategoria).ThenInclude(x => x.Categoria).Where(x => x.FechaFin >= inicio && x.FechaFin <= fin && x.Acta.CarreraId == carreraId);
         }
 
         public IQueryable<ActaEUDetalle> GetDetalleByMesAnhoCarrera(int mes, int anho, int carreraId)

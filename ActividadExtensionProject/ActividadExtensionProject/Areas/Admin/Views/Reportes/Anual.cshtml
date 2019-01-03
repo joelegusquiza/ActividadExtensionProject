@@ -14,7 +14,7 @@
                 <div class="m-portlet__head-title">
 
                     <h3 class="m-portlet__head-text">
-                        Reporte Mensual
+                        Reporte Anual
                     </h3>
                 </div>
             </div>
@@ -44,23 +44,7 @@
                                 </div>
                                 <div class="d-md-none m--margin-bottom-10"></div>
                             </div>
-                            <div class="col-md-3">
-                                <div class="m-form__group m-form__group--inline">
-                                    <div class="m-form__label">
-                                        <label class="m-label m-label--single">
-                                            Mes:
-                                        </label>
-                                    </div>
-                                    <div class="m-form__control">
-                                        <select class="form-control m-input m-input--square" id="reporteMesesSelect" data-bind="options: mesesExistentes,
-                                               optionsValue: 'value',
-                                               optionsText: 'text',
-                                               value: mes,
-                                               optionsCaption: 'Seleccione una opcion'"></select>
-                                    </div>
-                                </div>
-                                <div class="d-md-none m--margin-bottom-10"></div>
-                            </div>
+                          
                             <div class="col-md-3">
                                 <div class="m-form__group m-form__group--inline">
                                     <div class="m-form__label">
@@ -96,76 +80,56 @@
             <!--begin: Datatable -->
 
             <table class="table m-table m-table--head-bg-brand" id="reporteMensualTable" width="100%">
-                    <thead>
-                        <tr>
-                            <th title="Field #1">
-                                Actividades EU
-                            </th>
-                            <th title="Field #2">
-                                Tarea
-                            </th>
-                            <th title="Field #3">
-                                Cantidad
-                            </th>
-                            <th>
-                                Lugar
-                            </th>
-                            <th>
-                                Organizador de la actividad
-                            </th>
-                            <th>
-                                Ejecutor Varon
-                            </th>
-                            <th>
-                                Ejecutor Mujer
-                            </th>
-                            <th>
-                                Beneficiarios Institucion
-                            </th>
-                            <th>
-                                Beneficiarios Personas Varon
-                            </th>
-                            <th>
-                                Beneficiarios Personas Mujeres
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody data-bind="foreach: actividades">
-                       
-                        <tr>
-                            <td title="Field #1" data-bind="text: actividadEU">
-                                
-                            </td>
-                            <td title="Field #2" data-bind="text: tarea">
-                                
-                            </td>
-                            <td title="Field #3" data-bind="text: cantidad">
-                                
-                            </td>
-                            <td title="Field #4" data-bind="text: lugar">
-                                
-                            </td>
-                            <td title="Field #5" data-bind="text: organizador">
-                                  
-                            </td>
-                            <td title="Field #6" data-bind="text: ejecutorVaron">
-                                
-                            </td>
-                            <td title="Field #7" data-bind="text: ejecutorMujer">
-                                
-                            </td>
-                            <td title="Field #8" data-bind="text: beneficiariosInstitucion">
-                                
-                            </td>
-                            <td title="Field #9" data-bind="text: beneficiarosPersonasVaron">
-                                
-                            </td>
-                            <td title="Field #10" data-bind="text: beneficiariosPersonasMujer">
-                                
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <thead>
+                    <tr>
+                        <th title="Field #1">
+                            Actividades EU
+                        </th>
+                        <th title="Field #2">
+                            Tarea
+                        </th>
+                        <th title="Field #3">
+                            Cantidad
+                        </th>
+                        <th>
+                            Lugar
+                        </th>
+                        <th>
+                            Organizador de la actividad
+                        </th>
+                        <th>
+                            Ejecutor Varon
+                        </th>
+                        <th>
+                            Ejecutor Mujer
+                        </th>
+                        <th>
+                            Beneficiarios Institucion
+                        </th>
+                        <th>
+                            Beneficiarios Personas Varon
+                        </th>
+                        <th>
+                            Beneficiarios Personas Mujeres
+                        </th>
+                    </tr>
+                </thead>
+                <tbody data-bind="foreach: actividades">
+
+                    <tr>
+                        <td title="Field #1" data-bind="text: actividadEU"></td>
+                        <td title="Field #2" data-bind="text: tarea"></td>
+                        <td title="Field #3" data-bind="text: cantidad"></td>
+                        <td title="Field #4" data-bind="text: lugar"></td>
+                        <td title="Field #5" data-bind="text: organizador"></td>
+                        <td title="Field #6" data-bind="text: ejecutorVaron"></td>
+                        <td title="Field #7" data-bind="text: ejecutorMujer"></td>
+                        <td title="Field #8" data-bind="text: beneficiariosInstitucion"></td>
+                        <td title="Field #9" data-bind="text: beneficiarosPersonasVaron"></td>
+                        <td title="Field #10" data-bind="text: beneficiariosPersonasMujer"></td>
+                    </tr>
+                </tbody>
+            </table>
             <!--end: Datatable -->
         </div>
     </div>
@@ -178,15 +142,15 @@
         var datatable;
         dataViewModel.getReporteMensual = function () {
             $.ajax({
-                url: "@Url.Action("GetReporteMensual", "Reportes")",
+                url: "@Url.Action("GetReporteAnual", "Reportes")",
                 type: "POST",
-                data: { mes: dataViewModel.mes(), year: dataViewModel.anho(), carreraId: dataViewModel.carreraId() },
+                data: {year: dataViewModel.anho(), carreraId: dataViewModel.carreraId() },
                 success: function (response) {
                     console.log(response)
-                  
+
                     ko.mapping.fromJS(response.actividades, {}, dataViewModel.actividades);
-                   
-                  
+
+
                 },
                 error: function () {
                     showError();
@@ -195,7 +159,7 @@
         }
         ko.applyBindings(dataViewModel);
         $(document).ready(function () {
-            
+
         });
     </script>
 }

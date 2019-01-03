@@ -9,9 +9,11 @@ namespace Core.DTOs.Reportes
     {
         public int CarreraId { get; set; }
         public int Mes { get; set; }
+        public int Semestre { get; set; }
         public int Anho { get; set; }
         public List<DropDownViewModel<int>> CarrerasExistentes { get; set; } = new List<DropDownViewModel<int>>();
         public List<DropDownViewModel<int>> MesesExistentes { get; set; } = new List<DropDownViewModel<int>>();
+        public List<DropDownViewModel<int>> SemestresExistentes { get; set; } = new List<DropDownViewModel<int>>();
         public List<DropDownViewModel<int>> AnhosExistentes { get; set; } = new List<DropDownViewModel<int>>();
         public List<ReporteItemViewModel> Actividades { get; set; } = new List<ReporteItemViewModel>();
     }

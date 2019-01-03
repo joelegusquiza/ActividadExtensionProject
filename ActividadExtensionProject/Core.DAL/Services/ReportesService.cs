@@ -1,5 +1,6 @@
 ﻿using Core.DAL.Interfaces;
 using Core.DTOs.Reportes;
+using Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,13 +18,46 @@ namespace Core.DAL.Services
 
         public ReporteIndexViewModel GetReporteMensual (int mes, int anho, int carreraId)
         {
-            var actaDetalles = _actasEU.GetDetalleByMesAnhoCarrera(mes, anho, carreraId);
+            var actaDetalles = _actasEU.GetDetalleInRange(GetInicioMes(mes, anho), GetFinMes(mes, anho), carreraId).ToList();
             var model = new ReporteIndexViewModel()
             {
                  Anho = anho,
                  Mes = mes,
                  CarreraId = carreraId
             };
+            model.Actividades = GetReporteList(actaDetalles);
+            return model;
+        }
+
+        public ReporteIndexViewModel GetReporteSemestral(int semestre, int anho, int carreraId)
+        {
+            var actaDetalles = _actasEU.GetDetalleInRange(GetInicioSemestre(semestre, anho), GetFinSemestre(semestre, anho), carreraId).ToList();
+            var model = new ReporteIndexViewModel()
+            {
+                Anho = anho,
+                Semestre = semestre,
+                CarreraId = carreraId
+            };
+            model.Actividades = GetReporteList(actaDetalles);
+            return model;
+        }
+
+        public ReporteIndexViewModel GetReporteAnual(int anho, int carreraId)
+        {
+            var actaDetalles = _actasEU.GetDetalleInRange(new DateTime(anho, 1, 1), new DateTime(anho, 12, 31), carreraId).ToList();
+            var model = new ReporteIndexViewModel()
+            {
+                Anho = anho,
+                CarreraId = carreraId
+            };
+            model.Actividades = GetReporteList(actaDetalles);
+            return model;
+        }
+
+
+        private List<ReporteItemViewModel> GetReporteList(List<ActaEUDetalle> actaDetalles)
+        {
+            List<ReporteItemViewModel> listToReturn = new List<ReporteItemViewModel>();
             foreach (var categoria in actaDetalles.Where(x => x.SubCategoriaId != null).Select(x => x.SubCategoria.Categoria))
             {
                 //var actividad = new ReporteViewModel()
@@ -45,11 +79,47 @@ namespace Core.DAL.Services
                         Organizador = detalles.FirstOrDefault().Acta.Carrera.Nombre
                     };
                     //actividad.Tareas.Add(tarea);
-                    model.Actividades.Add(tarea);
+                    listToReturn.Add(tarea);
                 }
                 //model.Actividades.Add(actividad);
             }
-            return model;
+            return listToReturn;
+        }
+
+        private DateTime GetInicioMes (int mes, int year)
+        {
+            return new DateTime(year, mes, 1);
+        }
+
+        private DateTime GetFinMes(int mes, int year) 
+        {
+            return GetInicioMes(mes, year).AddMonths(1).AddDays(-1);
+        }
+
+        private DateTime GetInicioSemestre(int semestre, int year)
+        {
+            switch (semestre)
+            {
+                case 1:
+                    return new DateTime(year, 1, 1);
+                case 2:
+                    return new DateTime(year, 7, 1);
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        private DateTime GetFinSemestre(int semestre, int year)
+        {
+            switch (semestre)
+            {
+                case 1:
+                    return new DateTime(year, 6, 30);
+                case 2:
+                    return new DateTime(year, 12, 31);
+                default:
+                    throw new NotImplementedException();
+            }
         }
     }
 }

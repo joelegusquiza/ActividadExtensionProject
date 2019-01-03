@@ -1,0 +1,126 @@
+﻿@model Core.DTOs.Estudiantes.UpsertEstudianteViewModel
+@{
+    ViewData["Title"] = "ListaClientes";
+    Layout = "~/Views/Shared/_EmptyLayout.cshtml";
+}
+
+<div class="" style="width: 100%">
+    <!--begin::Portlet-->
+    <div class="m-portlet m-portlet--tab" style="margin-bottom: 0px !important">
+        <!--begin::Form-->
+        <form id="form" class="m-form m-form--fit m-form--label-align-right" data-bind="submit: postDataToController">
+            <div class="form-group m-form__group">
+                <label for="exampleInputEmail1">
+                    Cedula de Identidad
+                </label>
+                <input type="text" class="form-control m-input" id="" name="cedulaIdentidad" aria-describedby="emailHelp" placeholder="" data-bind="value: cedulaIdentidad">
+
+            </div>
+            <div class="form-group m-form__group">
+                <label for="exampleInputEmail1">
+                    Nombre
+                </label>
+                <input type="text" class="form-control m-input" id="" name="nombre" aria-describedby="emailHelp" placeholder="" data-bind="value: nombre">
+
+            </div>
+            <div class="form-group m-form__group">
+                <label for="exampleInputEmail1">
+                    Apellido
+                </label>
+                <input type="text" class="form-control m-input" id="" name="apellido" aria-describedby="emailHelp" placeholder="" data-bind="value: apellido">
+
+            </div>
+            <div class="form-group m-form__group">
+                <label for="exampleInputEmail1">
+                    Sexo
+                </label>
+                <select class="form-control m-input m-input--square" id="" name="sexo" data-bind="options: sexoExistentes,
+                                optionsValue: 'value',
+                               optionsText: 'text',
+                               value: sexo,
+                               optionsCaption: 'Seleccione una opcion'"></select>
+
+            </div>
+            <div class="form-group m-form__group">
+                <label>
+                    Carrera
+                </label>
+                <select class="form-control m-input m-input--square" id="" name="carrera" data-bind="options: carrerasExistentes,
+                                optionsValue: 'value',
+                               optionsText: 'text',
+                               value: carreraId,
+                               optionsCaption: 'Seleccione una opcion'"></select>
+            </div>
+            <div class="m-portlet__foot m-portlet__foot--fit">
+                <div class="m-form__actions">
+                    <div class="row">
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-success">
+                                Guardar
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <!--end::Form-->
+    </div>
+</div>
+@section scripts{
+    <script>
+         var model = @Html.Raw(Json.Serialize(Model));
+        var dataViewModel = ko.mapping.fromJS(model);
+
+        dataViewModel.postDataToController = function () {
+            if ($("#form").valid()) {
+                $.ajax({
+                    url: "@Url.Action("Upsert", "Estudiantes")",
+                    type: "POST",
+                    data: { model: ko.toJSON(dataViewModel) },
+                    success: function (response) {
+                        if (response.success) {
+                            parent.closeAddEstudianteModal(dataViewModel.cedulaIdentidad());
+                            
+                        } else {
+                            showError(response.message);
+                        }
+                    },
+                    error: function () {
+                        showError();
+                    }
+                });
+            }
+
+            return false;
+        }
+        $(document).ready(function ()
+        {
+            $('#form').validate({
+                rules: {
+                    cedulaIdentidad: {
+                        required: true,
+                    },
+                    nombre: {
+                        required: true,
+                    },
+                    apellido: {
+                        required: true,
+                    },
+                    sexo: {
+                        required: true,
+                    },
+                    carrera: {
+                        required: true
+                    }
+                },
+                errorPlacement: function (error, element) {
+                    var span = element.siblings('span');
+                    error.appendTo(span);
+                }
+            });
+        })
+        ko.applyBindings(dataViewModel);
+    </script>
+
+}

@@ -9,7 +9,6 @@ namespace Core.DTOs.Estudiantes
     public class UpsertEstudianteViewModel
     {
         public int Id { get; set; }
-        public bool Active { get; set; }
         public string CedulaIdentidad { get; set; }
         public string Nombre { get; set; }
         public string Apellido { get; set; }
