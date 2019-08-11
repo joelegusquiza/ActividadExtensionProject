@@ -6,12 +6,13 @@ using AutoMapper;
 using Core.DAL.Interfaces;
 using Core.DTOs.Carreras;
 using Core.DTOs.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace ActividadExtensionProject.Areas.Admin.Controllers
 {
-    [Area("Admin")]
+    [Area("Admin"), Authorize("Admin")]
     public class CarrerasController : Controller
     {
         private readonly ICarreras _carreras;
@@ -38,7 +39,13 @@ namespace ActividadExtensionProject.Areas.Admin.Controllers
             return View(viewModel);
         }
 
-        [HttpPost]
+		public IActionResult AddCarrera()
+		{
+			var viewModel = new UpsertCarreraViewModel();			
+			return View("~/Areas/Admin/Views/Carreras/Shared/AddCarrera.cshtml", viewModel);
+		}
+
+		[HttpPost]
         public SystemValidationModel Upsert(string model)
         {
             var viewModel = JsonConvert.DeserializeObject<UpsertCarreraViewModel>(model);
@@ -51,7 +58,9 @@ namespace ActividadExtensionProject.Areas.Admin.Controllers
             {
                 validation = _carreras.Add(viewModel);
                 validation.Message = validation.Success ? Url.Action("Index", "Carreras", new { area = "Admin" }) : "No se pudo guardar la carrera";
-            }
+				validation.AdditionalDataString = validation.Success ? $"{viewModel.Abreviatura} - {viewModel.Nombre}" : "";
+			}
+
             return validation;
 
         }

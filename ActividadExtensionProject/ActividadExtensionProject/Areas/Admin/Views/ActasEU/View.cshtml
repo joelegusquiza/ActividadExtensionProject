@@ -1,0 +1,177 @@
+﻿@model Core.DTOs.ActasEU.ViewActaEUViewModel
+@{
+	ViewData["Title"] = "Add";
+	Layout = "~/Areas/Shared/Views/Shared/_Layout.cshtml";
+}
+
+<div class="m-content" style="width: 100%">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="m-portlet m-portlet--tab">
+				<div class="m-portlet__head">
+					<div class="m-portlet__head-caption">
+						<div class="m-portlet__head-title">
+							<span class="m-portlet__head-icon m--hide">
+								<i class="la la-gear"></i>
+							</span>
+							<h3 class="m-portlet__head-text">
+								Ver Acta
+							</h3>
+						</div>
+					</div>
+				</div>
+			
+				<!--begin::Form-->
+				<form id="form" class="m-form m-form--fit m-form--label-align-right" data-bind="submit: save">
+					<div class="form-group m-form__group">
+						<label>
+							Cedula de Identidad
+						</label>
+						<div class="input-group">
+							<input type="text" class="form-control" data-bind="value: estudiante">
+							
+						</div>
+					</div>
+					<div class="form-group m-form__group">
+						<label>
+							Carrera
+						</label>
+						<div class="input-group">
+							<select class="form-control m-input m-input--square" id="carreraSelect" data-bind="options: carrerasExistentes,
+                                optionsValue: 'value',
+                               optionsText: 'text',
+                               value: carreraId,
+                               optionsCaption: 'Seleccione una opcion'" disabled></select>
+							
+						</div>
+
+					</div>
+
+					<div class="m-portlet__body" data-bind="foreach: categorias">
+						<div class="form-group m-form__group">
+							<label data-bind="text: nombre ()+ ' ('+descripcion()+')'">
+
+							</label>
+
+							<table class="table m-table--head-bg-success form-control m-input">
+								<thead>
+									<tr>
+										<th>
+											Actividad Extension Universitaria
+										</th>
+
+										<th>
+											Cantidad Horas Realizadas
+										</th>
+										<th>
+											Cantidad Horas de Extension
+										</th>
+										<th>
+											Fecha Inicio
+										</th>
+										<th>
+											Fecha Fin
+										</th>
+										<th>
+											Lugar/Profesor/Tutor
+										</th>
+
+										<th width="5%">
+											Benef. H.
+										</th>
+										<th width="5%">
+											Benef. M.
+										</th>
+									</tr>
+								</thead>
+								<tbody data-bind="foreach: detalle">
+									<tr>
+
+										<td data-bind="text: caracter()+' - '+nombre()"></td>
+										<td><input type="text" data-bind="value: horasRelojRealizadas" readonly/></td>
+										<td><input type="text" data-bind="value: horasExtensionRealizadas" readonly/></td>
+										<td><input value="" class="form-control datepicker" style="width: 100% !important;" data-bind="datepicker: fechaInicio, datepickerOptions: {language: 'es'}" disabled></td>
+										<td><input value="" class="form-control datepicker" style="width: 100% !important;" data-bind="datepicker: fechaFin, datepickerOptions: {language: 'es'}" disabled></td>
+										<td><input type="text" data-bind="value: lugarProfesorTutor" readonly/></td>
+										<td><input type="text" data-bind="value: beneficiariosHombres" readonly/></td>
+										<td><input type="text" data-bind="value: beneficiariosMujeres" readonly/></td>
+									</tr>
+
+								</tbody>
+							</table>
+						</div>
+
+					</div>
+					
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+@{
+	Html.RenderPartial("~/Areas/Admin/Views/Shared/_AddEstudianteModal.cshtml");
+	Html.RenderPartial("~/Areas/Admin/Views/Shared/_AddCarreraModal.cshtml");
+}
+@section scripts{
+	<script>
+
+        var model = @Html.Raw(Json.Serialize(Model));
+        var dataViewModel = ko.mapping.fromJS(model);
+
+         dataViewModel.save = function () {
+            if ($("#form").valid()) {
+                $.ajax({
+                    url: "@Url.Action("Save", "ActasEU")",
+                    type: "POST",
+                    data: { model: ko.toJSON(dataViewModel) },
+
+
+                    success: function (response) {
+                        if (response.success) {
+                            window.location.replace(response.message);
+                        } else {
+                            showError(response.message);
+                        }
+                    },
+                    error: function () {
+                        showError();
+                    }
+                });
+            }
+
+            return false;
+        }
+
+        ko.applyBindings(dataViewModel);
+
+
+        function showAgregarEstudianteModal()
+        {
+            $("#addEstudianteModalIframe").attr('src', '@Url.Action("AddEstudiante", "Estudiantes", new { area = "Admin"})');
+            $("#addEstudianteModal").modal("show");
+		}
+
+		function showAgregarCarreraModal()
+        {
+            $("#addCarreraModalIframe").attr('src', '@Url.Action("AddCarrera", "Carreras", new { area = "Admin"})');
+            $("#addCarreraModal").modal("show");
+        }
+
+        function closeAddEstudianteModal(cedulaIdentidad)
+        {
+            $("#addEstudianteModal").modal("hide");
+            dataViewModel.cedulaIdentidad(cedulaIdentidad);
+        }
+
+        function closeAddCarreraModal(carreraId, carreraName)
+        {
+			$("#addCarreraModal").modal("hide");
+			$('#carreraSelect').append($('<option>', {
+				value: carreraId,
+				text: carreraName
+			}));
+
+        }
+	</script>
+}
+

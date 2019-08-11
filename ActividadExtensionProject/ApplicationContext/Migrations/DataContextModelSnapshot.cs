@@ -58,6 +58,10 @@ namespace ApplicationContext.Migrations
 
                     b.Property<bool>("Active");
 
+                    b.Property<int>("BeneficiariosHombres");
+
+                    b.Property<int>("BeneficiariosMujeres");
+
                     b.Property<int?>("CategoriaId");
 
                     b.Property<DateTime>("DateCreated");
@@ -209,6 +213,45 @@ namespace ApplicationContext.Migrations
                     b.HasIndex("CategoriaId");
 
                     b.ToTable("SubCategorias");
+                });
+
+            modelBuilder.Entity("Core.Entities.Usuario", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Active");
+
+                    b.Property<string>("Apellido");
+
+                    b.Property<DateTime>("DateCreated");
+
+                    b.Property<DateTime?>("DateModified");
+
+                    b.Property<string>("Email");
+
+                    b.Property<string>("Nombre");
+
+                    b.Property<string>("PasswordHash");
+
+                    b.Property<Guid>("ResetPasswordGuid");
+
+                    b.Property<DateTime>("ResetPasswordGuidExpiration");
+
+                    b.Property<int>("Rol");
+
+                    b.Property<int>("Role");
+
+                    b.Property<string>("Salt");
+
+                    b.Property<int>("UserCreatedId");
+
+                    b.Property<int>("UserModifiedId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Usuarios");
                 });
 
             modelBuilder.Entity("Core.Entities.ActaEU", b =>

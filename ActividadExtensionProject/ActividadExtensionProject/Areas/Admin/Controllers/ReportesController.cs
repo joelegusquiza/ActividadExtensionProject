@@ -7,6 +7,7 @@ using Core.DAL.Interfaces;
 using Core.DTOs.Reportes;
 using Core.DTOs.Shared;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace ActividadExtensionProject.Areas.Admin.Controllers
 {
@@ -80,6 +81,12 @@ namespace ActividadExtensionProject.Areas.Admin.Controllers
 
         }
 
+		public IActionResult Actividades()
+		{
+			var viewModel = new ReporteActividadesIndexViewModel();
+			return View(viewModel);
+		}
+
         public ReporteIndexViewModel GetReporteMensual(int mes, int year, int carreraId)
         {
             var viewModel = _reportes.GetReporteMensual(mes, year, carreraId);        
@@ -98,6 +105,12 @@ namespace ActividadExtensionProject.Areas.Admin.Controllers
             return viewModel;
         }
 
-
-    }
+		public ReporteActividadesIndexViewModel GetReporteActividades(string parameter)
+		{
+			var parameterModel = JsonConvert.DeserializeObject<ReporteActividadParameter>(parameter);
+			var viewModel = _reportes.GetReporteActividades(parameterModel.Inicio, parameterModel.Fin);
+			viewModel.Actividades = viewModel.Actividades.OrderBy(x => x.Estudiante).ToList();
+			return viewModel;
+		}
+	}
 }

@@ -6,6 +6,7 @@ using ApplicationContext;
 using Core.AutoMapper;
 using Core.DAL.Interfaces;
 using Core.DAL.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -34,7 +35,8 @@ namespace ActividadExtensionProject
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+			services.AddSession();
+			services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddSingleton(x => Configuration);
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
@@ -44,7 +46,21 @@ namespace ActividadExtensionProject
             services.AddSingleton<ISubCategorias, SubCategoriasService>();
             services.AddSingleton<ICarreras, CarrerasService>();
             services.AddSingleton<IReportes, ReportesService>();
-            return services.BuildServiceProvider();
+			services.AddSingleton<IUsuarios, UsuariosService>();
+			services.AddAuthorization(opts =>
+			{
+				
+				opts.AddPolicy("Admin", x => x.RequireRole("Admin"));
+			});
+			services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+				.AddCookie(opts =>
+				{
+					opts.LoginPath = new PathString("/Shared/Login/Index");
+					opts.AccessDeniedPath = new PathString("/Shared/Login/Index");
+					opts.LogoutPath = new PathString("/Shared/Login/Index");
+					opts.SlidingExpiration = true;
+				});
+			return services.BuildServiceProvider();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,7 +72,8 @@ namespace ActividadExtensionProject
                 cfg.AddProfile<CategoriaProfile>();
                 cfg.AddProfile<EstudianteProfile>();
                 cfg.AddProfile<CarreraProfile>();
-            });
+				cfg.AddProfile<UsuariosProfile>();
+			});
             if (env.IsDevelopment())
             {
                 app.UseBrowserLink();
@@ -66,10 +83,10 @@ namespace ActividadExtensionProject
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-
-            app.UseStaticFiles();
-
-            app.UseMvc(routes =>
+			app.UseAuthentication();
+			app.UseStaticFiles();
+			app.UseSession();
+			app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "areaRoute",
@@ -77,7 +94,7 @@ namespace ActividadExtensionProject
 
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{area=Shared}/{controller=Login}/{action=Index}");
             });
         }
     }

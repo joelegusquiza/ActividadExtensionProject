@@ -6,12 +6,13 @@ using AutoMapper;
 using Core.DAL.Interfaces;
 using Core.DTOs.Categorias;
 using Core.DTOs.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace ActividadExtensionProject.Areas.Admin.Controllers
 {
-    [Area("Admin")]
+    [Area("Admin"), Authorize("Admin")]
     public class CategoriasController : Controller
     {
         private readonly ICategorias _categorias;

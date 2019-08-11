@@ -1,4 +1,5 @@
-﻿using Core.DAL.Interfaces;
+﻿using ApplicationContext;
+using Core.DAL.Interfaces;
 using Core.DTOs.Reportes;
 using Core.Entities;
 using System;
@@ -11,10 +12,12 @@ namespace Core.DAL.Services
     public class ReportesService : IReportes
     {
         private readonly IActasEU _actasEU;
-        public ReportesService(IActasEU actasEU)
+		private readonly DataContext _context;
+		public ReportesService(IActasEU actasEU, DataContext context)
         {
             _actasEU = actasEU;
-        }
+			_context = context;
+		}
 
         public ReporteIndexViewModel GetReporteMensual (int mes, int anho, int carreraId)
         {
@@ -54,6 +57,24 @@ namespace Core.DAL.Services
             return model;
         }
 
+		public ReporteActividadesIndexViewModel GetReporteActividades(DateTime inicio, DateTime fin) 
+		{
+			var modelToReturn = new ReporteActividadesIndexViewModel();
+			var actaDetalles = _actasEU.GetDetalleInRange(inicio, fin ).ToList();
+			foreach (var detalle in actaDetalles)
+			{
+				var item = new ReporteActividadViewModel()
+				{
+					CedulaIdentidad = detalle.Acta.Estudiante.CedulaIdentidad,
+					Estudiante = $"{detalle.Acta.Estudiante.Apellido}, {detalle.Acta.Estudiante.Nombre}",
+					Horas=detalle.HorasExtensionRealizadas,
+					Caracter = detalle.SubCategoria == null ? detalle.Categoria.Caracter : detalle.SubCategoria.Caracter,
+					LugarTutor = detalle.LugarProfesorTutor
+				};
+				modelToReturn.Actividades.Add(item);
+			}
+			return modelToReturn;
+		}
 
         private List<ReporteItemViewModel> GetReporteList(List<ActaEUDetalle> actaDetalles)
         {

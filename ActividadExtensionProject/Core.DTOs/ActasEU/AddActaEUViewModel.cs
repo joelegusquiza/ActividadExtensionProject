@@ -34,6 +34,8 @@ namespace Core.DTOs.ActasEU
         public DateTimeOffset FechaInicio { get; set; } = DateTimeOffset.Now;
         public DateTimeOffset FechaFin { get; set; } = DateTimeOffset.Now;
         public string LugarProfesorTutor { get; set; }
+		public int BeneficiariosHombres { get; set; }
+		public int BeneficiariosMujeres { get; set; }
 
-    }
+	}
 }

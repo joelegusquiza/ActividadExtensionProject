@@ -6,13 +6,14 @@ using AutoMapper;
 using Core.DAL.Interfaces;
 using Core.DTOs.Estudiantes;
 using Core.DTOs.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using static Core.Constants;
 
 namespace ActividadExtensionProject.Areas.Admin.Controllers
 {
-    [Area("Admin")]
+    [Area("Admin"), Authorize("Admin")]
     public class EstudiantesController : Controller
     {
         private readonly IEstudiantes _estudiantes;

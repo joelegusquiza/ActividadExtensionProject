@@ -1,0 +1,90 @@
+﻿@model Core.DTOs.Carreras.UpsertCarreraViewModel
+@{
+	ViewData["Title"] = "AddCarreras";
+	Layout = "~/Views/Shared/_EmptyLayout.cshtml";
+}
+<div class="" style="width: 100%">
+	<!--begin::Portlet-->
+	<div class="m-portlet m-portlet--tab" style="margin-bottom: 0px !important">
+		<!--begin::Form-->
+		<form id="form" class="m-form m-form--fit m-form--label-align-right" data-bind="submit: postDataToController">
+
+			<div class="form-group m-form__group">
+				<label for="exampleInputEmail1">
+					Nombre
+				</label>
+				<input type="text" class="form-control m-input" id="" name="nombre" aria-describedby="emailHelp" placeholder="" data-bind="value: nombre">
+
+			</div>
+			<div class="form-group m-form__group">
+				<label for="exampleInputEmail1">
+					Abreviatura
+				</label>
+				<input type="text" class="form-control m-input" id="abreviacion" name="abreviacion" placeholder="" data-bind="value: abreviatura">
+
+			</div>
+
+			<div class="m-portlet__foot m-portlet__foot--fit">
+				<div class="m-form__actions">
+					<div class="row">
+						<div class="col-12">
+							<button type="submit" class="btn btn-success">
+								Guardar
+							</button>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+		<!--end::Form-->
+	</div>
+</div>
+@section scripts{
+	<script>
+         var model = @Html.Raw(Json.Serialize(Model));
+        var dataViewModel = ko.mapping.fromJS(model);
+		dataViewModel.postDataToController = function () {
+            if ($("#form").valid()) {
+                $.ajax({
+                    url: "@Url.Action("Upsert", "Carreras")",
+                    type: "POST",
+                    data: { model: ko.toJSON(dataViewModel) },
+                    success: function (response) {
+						if (response.success) {
+							parent.closeAddCarreraModal(response.id, response.additionalDataString);
+
+						} else {
+							showError(response.message);
+						}
+                    },
+                    error: function () {
+                        showError();
+                    }
+                });
+            }
+
+            return false;
+        }
+        $(document).ready(function ()
+        {
+            $('#form').validate({
+                rules: {
+                   
+                    nombre: {
+                        required: true,
+                    },
+                    abreviacion: {
+                        required: true,
+                    }
+                },
+                errorPlacement: function (error, element) {
+                    var span = element.siblings('span');
+                    error.appendTo(span);
+                }
+            });
+        })
+        ko.applyBindings(dataViewModel);
+	</script>
+
+}

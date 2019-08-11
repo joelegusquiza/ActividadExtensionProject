@@ -40,8 +40,9 @@ namespace ApplicationContext
         public DbSet<ActaEUDetalle> ActasEUDetalles { get; set; }
         public DbSet<Carrera> Carreras { get; set; }
         public DbSet<Estudiante> Estudiantes { get; set; }
+		public DbSet<Usuario> Usuarios { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
 

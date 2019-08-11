@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 
 namespace Core
@@ -8,7 +9,7 @@ namespace Core
     {
         public static class CustomClaimTypes
         {            
-            public static string UserId = "PosControl.UserId";
+            public static string UserId = "UserId";
         }
 
         public enum Sexo
@@ -16,5 +17,13 @@ namespace Core
             Masculino = 1,
             Femenino = 2
         }
-    }
+
+		public enum SystemRoles
+		{
+			[Description("Admin")]
+			Admin = 0,
+			[Description("Usuario Web")]
+			User = 1,			
+		}
+	}
 }

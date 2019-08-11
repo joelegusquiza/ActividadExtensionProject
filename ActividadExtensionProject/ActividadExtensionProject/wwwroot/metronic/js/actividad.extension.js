@@ -1,9 +1,14 @@
 ﻿function showError(message) {
-    $("#errorDivMessage").text(message);
-    $("#errorDiv").show().delay(7000).fadeOut();
+	swal("Error!", message, "error");
 }
 
 function showSuccess(message) {
-    $("#successDivMessage").text(message);
-    $("#successDiv").show().delay(7000).fadeOut();
+	swal("Exito!", message, "success");
+}
+
+function showSuccessAndGoToUrl(message, url) {
+	swal("Exito!", message, "success")
+		.then(function (result) {
+			window.location.replace(url);
+		});
 }

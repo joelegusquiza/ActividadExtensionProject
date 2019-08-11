@@ -10,5 +10,7 @@ namespace Core.DAL.Interfaces
         ReporteIndexViewModel GetReporteMensual(int mes, int anho, int carreraId);
         ReporteIndexViewModel GetReporteSemestral(int semestre, int anho, int carreraId);
         ReporteIndexViewModel GetReporteAnual(int anho, int carreraId);
-    }
+		ReporteActividadesIndexViewModel GetReporteActividades(DateTime inicio, DateTime fin);
+
+	}
 }

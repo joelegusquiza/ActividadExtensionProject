@@ -26,7 +26,22 @@ namespace Core.DAL.Services
             return _context.Set<ActaEU>().Include(x => x.Carrera).Include(x => x.Estudiante).Where(x => x.Active);
         }
 
-        public IQueryable<ActaEUDetalle> GetDetalleInRange(DateTime inicio, DateTime fin, int carreraId)
+		public ActaEU GetById(int id)
+		{
+			return GetAll().Include(x => x.ActaEUDetalle).FirstOrDefault(x => x.Id == id);
+		}
+
+		public ActaEU GetForView(int id)
+		{
+			return GetAll().Include(x => x.ActaEUDetalle).Include(x => x.Estudiante).FirstOrDefault(x => x.Id == id);
+		}
+
+		public IQueryable<ActaEUDetalle> GetDetalleInRange(DateTime inicio, DateTime fin)
+		{
+			return _context.Set<ActaEUDetalle>().Include(x => x.Acta).ThenInclude(x => x.Carrera).ThenInclude(x => x.Estudiantes).Include(x => x.Categoria).Include(x => x.SubCategoria).ThenInclude(x => x.Categoria).Where(x => x.FechaFin >= inicio && x.FechaFin <= fin );
+		}
+
+		public IQueryable<ActaEUDetalle> GetDetalleInRange(DateTime inicio, DateTime fin, int carreraId)
         {
             return _context.Set<ActaEUDetalle>().Include(x => x.Acta).ThenInclude(x => x.Carrera).ThenInclude(x => x.Estudiantes).Include(x => x.Categoria).Include(x => x.SubCategoria).ThenInclude(x => x.Categoria).Where(x => x.FechaFin >= inicio && x.FechaFin <= fin && x.Acta.CarreraId == carreraId);
         }
@@ -58,6 +73,7 @@ namespace Core.DAL.Services
                         if (subcategoria.SubCategoriaId == 0)
                         {   //significa que la categoria no tiene subcategoria
                             detalleActa.CategoriaId = categoria.CategoriaId;
+							detalleActa.SubCategoriaId = null;
                         }
                         else
                         {

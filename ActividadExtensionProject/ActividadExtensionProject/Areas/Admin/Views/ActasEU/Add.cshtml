@@ -40,29 +40,25 @@
                                 </button>
                             </div>
                         </div>
-                    </div>
-                    @*<div class="form-group m-form__group" >
-                        <label for="exampleInputEmail1">
-                            Cedula de Identidad
-                        </label>
-                        <input type="text" class="form-control m-input" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="" data-bind="value: cedulaIdentidad">
-                        <div class="" align="right">                           
-                            <button type="button" class="btn btn-success" onclick="showAgregarEstudianteModal()">
-                                Agregar
-                            </button>
-
-                        </div>
-                    </div>*@
-                    <div class="form-group m-form__group">
-                        <label>
-                            Carrera
-                        </label>
-                        <select class="form-control m-input m-input--square" id="exampleSelect1" data-bind="options: carrerasExistentes,
+                    </div>                   
+					<div class="form-group m-form__group">
+						<label>
+							Carrera
+						</label>
+						<div class="input-group">
+							<select class="form-control m-input m-input--square" id="carreraSelect" data-bind="options: carrerasExistentes,
                                 optionsValue: 'value',
                                optionsText: 'text',
                                value: carreraSeleccionadaId,
                                optionsCaption: 'Seleccione una opcion'"></select>
-                    </div>
+							<div class="input-group-append">
+								<button class="btn btn-primary" type="button" onclick="showAgregarCarreraModal()">
+									Agregar
+								</button>
+							</div>
+						</div>
+						
+					</div>
 
                     <div class="m-portlet__body" data-bind="foreach: categorias">
                         <div class="form-group m-form__group">
@@ -72,39 +68,47 @@
 
                             <table class="table m-table--head-bg-success form-control m-input">
                                 <thead>
-                                    <tr>
-                                        <th>
-                                            Actividad Extension Universitaria
-                                        </th>
+									<tr>
+										<th>
+											Actividad Extension Universitaria
+										</th>
 
-                                        <th>
-                                            Canitdad Horas Realizadas
-                                        </th>
-                                        <th>
-                                            Canitad Horas de Extension
-                                        </th>
-                                        <th>
-                                            Fecha Inicio
-                                        </th>
-                                        <th>
-                                            Fecha Fin
-                                        </th>
-                                        <th>
-                                            Lugar/Profesor/Tutor
-                                        </th>
+										<th>
+											Cantidad Horas Realizadas
+										</th>
+										<th>
+											Cantidad Horas de Extension
+										</th>
+										<th>
+											Fecha Inicio
+										</th>
+										<th>
+											Fecha Fin
+										</th>
+										<th>
+											Lugar/Profesor/Tutor
+										</th>
 
-                                    </tr>
+										<th width="5%">
+											Benef. H.
+										</th>
+										<th width="5%">
+											Benef. M.
+										</th>
+									</tr>
                                 </thead>
                                 <tbody data-bind="foreach: detalle">
-                                    <tr>
+									<tr>
 
-                                        <td data-bind="text: caracter()+' - '+nombre()"></td>
-                                        <td><input type="text" data-bind="value: horasRelojRealizadas" /></td>
-                                        <td><input type="text" data-bind="value: horasExtensionRealizadas" /></td>
-                                        <td><input value="" class="form-control datepicker" style="width: 100% !important;" data-bind="datepicker: fechaInicio, datepickerOptions: {language: 'es'}"></td>
-                                        <td><input value="" class="form-control datepicker" style="width: 100% !important;" data-bind="datepicker: fechaFin, datepickerOptions: {language: 'es'}"></td>
-                                        <td><input type="text" data-bind="value: lugarProfesorTutor" /></td>
-                                    </tr>
+										<td data-bind="text: caracter()+' - '+nombre()"></td>
+										<td><input type="text" data-bind="value: horasRelojRealizadas" /></td>
+										<td><input type="text" data-bind="value: horasExtensionRealizadas" /></td>
+										<td><input value="" class="form-control datepicker" style="width: 100% !important;" data-bind="datepicker: fechaInicio, datepickerOptions: {language: 'es'}"></td>
+										<td><input value="" class="form-control datepicker" style="width: 100% !important;" data-bind="datepicker: fechaFin, datepickerOptions: {language: 'es'}"></td>
+										<td><input type="text" data-bind="value: lugarProfesorTutor" /></td>
+										<td><input type="text" data-bind="value: beneficiariosHombres" /></td>
+										<td><input type="text" data-bind="value: beneficiariosMujeres" /></td>
+									</tr>
 
                                 </tbody>
                             </table>
@@ -129,7 +133,8 @@
     </div>
 </div>
 @{
-    Html.RenderPartial("~/Areas/Admin/Views/Shared/_AddEstudianteModal.cshtml");
+	Html.RenderPartial("~/Areas/Admin/Views/Shared/_AddEstudianteModal.cshtml");
+	Html.RenderPartial("~/Areas/Admin/Views/Shared/_AddCarreraModal.cshtml");
 }
 @section scripts{
     <script>
@@ -168,12 +173,28 @@
         {
             $("#addEstudianteModalIframe").attr('src', '@Url.Action("AddEstudiante", "Estudiantes", new { area = "Admin"})');
             $("#addEstudianteModal").modal("show");
+		}
+
+		function showAgregarCarreraModal()
+        {
+            $("#addCarreraModalIframe").attr('src', '@Url.Action("AddCarrera", "Carreras", new { area = "Admin"})');
+            $("#addCarreraModal").modal("show");
         }
 
         function closeAddEstudianteModal(cedulaIdentidad)
         {
             $("#addEstudianteModal").modal("hide");
             dataViewModel.cedulaIdentidad(cedulaIdentidad);
+        }
+
+        function closeAddCarreraModal(carreraId, carreraName)
+        {
+			$("#addCarreraModal").modal("hide");
+			$('#carreraSelect').append($('<option>', {
+				value: carreraId,
+				text: carreraName
+			}));
+            
         }
     </script>
 }

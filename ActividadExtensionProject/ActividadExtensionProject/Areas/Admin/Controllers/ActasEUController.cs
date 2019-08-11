@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Core.DAL.Interfaces;
 using Core.DTOs.ActasEU;
 using Core.DTOs.Shared;
+using Core.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace ActividadExtensionProject.Areas.Admin.Controllers
 {
-    [Area("Admin")]
+    [Area("Admin"), Authorize("Admin")]
     public class ActasEUController : Controller
     {
         private readonly IActasEU _actasEU;
@@ -66,6 +69,50 @@ namespace ActividadExtensionProject.Areas.Admin.Controllers
             return View(viewModel);
         }
 
+		public IActionResult View(int id)
+		{
+			var viewModel = new ViewActaEUViewModel();
+			var acta = _actasEU.GetById(id);
+			var categorias = _categorias.GetAllWithSubCategorias();
+			viewModel.CarrerasExistentes = _carreras.GetAll().Select(x => new DropDownViewModel<int>()
+			{
+				Text = $"{x.Abreviatura} - {x.Nombre}",
+				Value = x.Id
+			}).ToList();
+			viewModel = Mapper.Map(acta, viewModel);
+			foreach (var categoria in categorias)
+			{
+				var categoriaTemp = Mapper.Map<AddActaEUCategoriaViewModel>(categoria);
+
+				foreach (var subCategoria in categoria.SubCategorias.Where(x => x.Active))
+				{
+					var detalle = Mapper.Map<AddActaEUDetalleViewModel>(subCategoria);
+					var savedDetalle = acta.ActaEUDetalle.FirstOrDefault(x => x.SubCategoriaId == subCategoria.Id);
+					if (savedDetalle != null)
+						detalle = Mapper.Map(savedDetalle, detalle);
+					categoriaTemp.Detalle.Add(detalle);
+				}
+				//si la categoria no tiene subcategorias se le agrega esa categoria como subcategoria para mostrar en la vista
+				if (categoria.SubCategorias.Count == 0)
+				{
+					var subCat = new AddActaEUDetalleViewModel()
+					{
+						Nombre = categoria.Nombre,
+						Caracter = categoria.Caracter,
+					};
+					var savedDetalle = acta.ActaEUDetalle.FirstOrDefault(x => x.CategoriaId == categoria.Id);
+					if (savedDetalle != null)
+						subCat = Mapper.Map(savedDetalle, subCat);
+					categoriaTemp.Detalle.Add(subCat);
+				}
+			
+				viewModel.Categorias.Add(categoriaTemp);
+
+			}
+		
+			
+			return View(viewModel);
+		}
 
         [HttpPost]
         public SystemValidationModel Save (string model)

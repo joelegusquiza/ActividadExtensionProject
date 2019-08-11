@@ -33,7 +33,8 @@ namespace Core.DAL.Services
 
         public SystemValidationModel Add(UpsertCarreraViewModel viewModel)
         {
-            var carrera = Mapper.Map<Carrera>(viewModel);           
+            var carrera = Mapper.Map<Carrera>(viewModel);
+			carrera.Active = true;
             _context.Entry(carrera).State = EntityState.Added;
             var success = _context.SaveChanges() > 0;
             var validation = new SystemValidationModel()
