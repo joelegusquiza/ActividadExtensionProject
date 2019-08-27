@@ -39,7 +39,12 @@ namespace Core.DAL.Services
         public SystemValidationModel Save(AddCategoriaViewModel viewModel)
         {
             var categoria = Mapper.Map<Categoria>(viewModel);
-            _context.Entry(categoria).State = EntityState.Added;
+			var categoriaExist = _context.Set<Categoria>().FirstOrDefault(x => x.Nombre.ToLower().Trim() == viewModel.Nombre.ToLower().Trim());
+			if (categoriaExist != null)
+			{
+				return new SystemValidationModel() { Success = false, Message = "Ya existe una categoria con el mismo nombre" };
+			}
+			_context.Entry(categoria).State = EntityState.Added;
             foreach (var subCategoria in viewModel.SubCategorias)
             {
                 var subCategoriaEntity = Mapper.Map<SubCategoria>(subCategoria);
@@ -57,7 +62,12 @@ namespace Core.DAL.Services
 
         public SystemValidationModel Edit(EditCategoriaViewModel viewModel)
         {
-            var categoria = GetById(viewModel.Id);
+			var categoriaExist = _context.Set<Categoria>().FirstOrDefault(x => x.Nombre.ToLower().Trim() == viewModel.Nombre.ToLower().Trim() && x.Id != viewModel.Id);
+			if (categoriaExist != null)
+			{
+				return new SystemValidationModel() { Success = false, Message = "Ya existe una categoria con el mismo nombre" };
+			}
+			var categoria = GetById(viewModel.Id);
             categoria = Mapper.Map(viewModel, categoria);
             _context.Entry(categoria).State = EntityState.Modified;
 

@@ -34,6 +34,16 @@ namespace Core.DAL.Services
         public SystemValidationModel Add(UpsertCarreraViewModel viewModel)
         {
             var carrera = Mapper.Map<Carrera>(viewModel);
+			var carreraExist = _context.Set<Carrera>().FirstOrDefault(x => x.Nombre.ToLower().Trim() == viewModel.Nombre.ToLower().Trim());
+			if (carreraExist != null)
+			{
+				return new SystemValidationModel() { Success = false, Message = "Ya existe una carrera con el mismo nombre" };
+			}
+			carreraExist = _context.Set<Carrera>().FirstOrDefault(x => x.Abreviatura.ToLower().Trim() == viewModel.Abreviatura.ToLower().Trim());
+			if (carreraExist != null)
+			{
+				return new SystemValidationModel() { Success = false, Message = "Ya existe una carrera con la misma abreviatura" };
+			}
 			carrera.Active = true;
             _context.Entry(carrera).State = EntityState.Added;
             var success = _context.SaveChanges() > 0;
@@ -47,7 +57,17 @@ namespace Core.DAL.Services
 
         public SystemValidationModel Edit(UpsertCarreraViewModel viewModel)
         {
-            var carrera = GetById(viewModel.Id);
+			var carreraExist = _context.Set<Carrera>().FirstOrDefault(x => x.Nombre.ToLower().Trim() == viewModel.Nombre.ToLower().Trim() && x.Id != viewModel.Id);
+			if (carreraExist != null)
+			{
+				return new SystemValidationModel() { Success = false, Message = "Ya existe una carrera con el mismo nombre" };
+			}
+			carreraExist = _context.Set<Carrera>().FirstOrDefault(x => x.Abreviatura.ToLower().Trim() == viewModel.Abreviatura.ToLower().Trim() && x.Id != viewModel.Id);
+			if (carreraExist != null)
+			{
+				return new SystemValidationModel() { Success = false, Message = "Ya existe una carrera con la misma abreviatura" };
+			}
+			var carrera = GetById(viewModel.Id);
             carrera = Mapper.Map(viewModel, carrera);
             _context.Entry(carrera).State = EntityState.Modified;
             var success = _context.SaveChanges() > 0;

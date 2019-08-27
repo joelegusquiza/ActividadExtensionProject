@@ -41,6 +41,11 @@ namespace Core.DAL.Services
 		public SystemValidationModel Add(UsuariosAddViewModel viewModel)
 		{
 			var usuario = Mapper.Map<Usuario>(viewModel);
+			var usuarioExist = _context.Set<Usuario>().FirstOrDefault(x => x.Email.ToLower().Trim() == viewModel.Email.ToLower().Trim());
+			if (usuarioExist != null)
+			{
+				return new SystemValidationModel() { Success = false, Message = "Ya existe un usuario con el mismo email" };
+			}
 			usuario.SetPassword(viewModel.Password);
 			_context.Entry(usuario).State = EntityState.Added;
 			var success = _context.SaveChanges() > 0;
@@ -54,6 +59,11 @@ namespace Core.DAL.Services
 		public SystemValidationModel Edit(UsuariosEditViewModel viewModel)
 		{
 			var usuario = GetById(viewModel.Id);
+			var usuarioExist = _context.Set<Usuario>().FirstOrDefault(x => x.Email.ToLower().Trim() == viewModel.Email.ToLower().Trim() && x.Id != viewModel.Id);
+			if (usuarioExist != null)
+			{
+				return new SystemValidationModel() { Success = false, Message = "Ya existe un usuario con el mismo email" };
+			}
 			if (!string.IsNullOrEmpty(viewModel.Password))
 				usuario.SetPassword(viewModel.Password);
 			usuario = Mapper.Map(viewModel, usuario);

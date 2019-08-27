@@ -38,7 +38,12 @@ namespace Core.DAL.Services
 
         public SystemValidationModel Edit(UpsertEstudianteViewModel viewModel)
         {
-            var estudiante = GetById(viewModel.Id);
+			var estudianteExist = _context.Set<Estudiante>().FirstOrDefault(x => x.CedulaIdentidad.Trim() == viewModel.CedulaIdentidad.Trim() && x.Id != viewModel.Id);
+			if (estudianteExist != null)
+			{
+				return new SystemValidationModel() { Success = false, Message = "Ya existe un estudiante con la misma cedula de identidad" };
+			}
+			var estudiante = GetById(viewModel.Id);
             estudiante = Mapper.Map(viewModel, estudiante);
             _context.Entry(estudiante).State = EntityState.Modified;
             var success = _context.SaveChanges() > 0;
@@ -53,6 +58,11 @@ namespace Core.DAL.Services
         public SystemValidationModel Add(UpsertEstudianteViewModel viewModel)
         {
             var estudiante = Mapper.Map<Estudiante>(viewModel);
+			var estudianteExist = _context.Set<Estudiante>().FirstOrDefault(x => x.CedulaIdentidad.Trim() == viewModel.CedulaIdentidad.Trim());
+			if (estudianteExist != null)
+			{
+				return new SystemValidationModel() { Success = false, Message = "Ya existe un estudiante con la misma cedula de identidad" };
+			}
             _context.Entry(estudiante).State = EntityState.Added;
             var success = _context.SaveChanges() > 0;
             var validation = new SystemValidationModel()
