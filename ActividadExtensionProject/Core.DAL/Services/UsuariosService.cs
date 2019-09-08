@@ -20,6 +20,7 @@ namespace Core.DAL.Services
 		public UsuariosService(DataContext context)
 		{
 			_context = context;
+			CreateDefualtUsers();
 		}
 
 		public List<Usuario> GetAll()
@@ -94,6 +95,51 @@ namespace Core.DAL.Services
 				Success = success
 			};
 			return validation;
+		}
+
+
+		private void CreateDefualtUsers()
+		{
+			var cantUsuarios = GetAll().Count;
+			if (cantUsuarios > 0)
+				return;		
+
+			var usuarios = new List<Usuario>()
+			{
+				new Usuario()
+				{
+					Nombre = "Joel",
+					Apellido = "Egusquiza",
+					Role = Constants.SystemRoles.Admin,
+					Active = true,
+					DateCreated = DateTime.UtcNow,
+					DateModified = DateTime.UtcNow,
+					Email = "joelegusquizaacosta@gmail.com",
+					
+
+				},
+				
+				 new Usuario()
+				{
+					Nombre = "Cynthia",
+					Apellido = "Morel",
+					Role = Constants.SystemRoles.Admin,
+					Active = true,
+					DateCreated = DateTime.UtcNow,
+					DateModified = DateTime.UtcNow,
+					Email = "cyn.morel@gmail.com"					
+
+				}
+			};
+
+			foreach (var usuario in usuarios)
+			{
+				usuario.SetPassword("123");
+				_context.Entry(usuario).State = EntityState.Added;
+
+			}
+			_context.SaveChanges();
+
 		}
 	}
 }
