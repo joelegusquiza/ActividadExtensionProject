@@ -14,6 +14,8 @@ namespace Core.Entities
         public Carrera Carrera { get; set; }
 
 
+
+
         public ICollection<ActaEUDetalle> ActaEUDetalle { get; set; } = new HashSet<ActaEUDetalle>();
 
     }
